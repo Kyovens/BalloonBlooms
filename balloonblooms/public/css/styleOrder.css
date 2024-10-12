@@ -1,0 +1,106 @@
+body {
+    background-color: whitesmoke;
+}
+
+/* Panel and tabs */
+.warpper{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.tabs {
+    margin-bottom: 0 !important;
+}
+.tab{
+    cursor: pointer;
+    padding:10px 69.2px;
+    margin:0px 10px;
+    background:rgba(255, 238, 238, 0.75);
+    display:inline-block;
+    color:#0c0c0c;
+    border-radius:8px 8px 0px 0px;
+}
+.panels{
+    background: white;
+    height:450px;
+    width:100%;
+    max-width:800px;
+    padding: 10px 30px;
+    border-radius:0px 8px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    box-shadow: 15px 10px 20px -10px gainsboro;
+    position: relative;
+}
+.panell{
+    display:none;
+    animation: fadein .8s;
+    position: relative;
+}
+label.tab {
+    font-size: 25px;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+.panel-title{
+    font-size:1.5em;
+    font-weight:bold
+}
+.radio{
+    display:none;
+}
+#one:checked ~ .panels #one-panel,
+#two:checked ~ .panels #two-panel,
+#three:checked ~ .panels #three-panel{
+    display:block;
+}
+#one:checked ~ .tabs label[for="one"],
+#two:checked ~ .tabs label[for="two"],
+#three:checked ~ .tabs label[for="three"]{
+    background:#fffffff6;
+    color:#000;
+    border-top: 5px solid #FFEEEE;
+}
+
+/* Order card */
+.order-card {
+    background-color: #FFEEEE;
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 10px 10px 10px -5px gainsboro;
+}
+i.icon-cancel, i.icon-proccess, i.icon-finish {
+    font-size: 138px;
+    opacity: 50%;
+    position: absolute;
+    right: 5%;
+    bottom: 10%;
+}
+img.ref-img {
+    border-radius: 5px;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+img.ref-img-det {
+    border-radius: 5px;
+    width: 280px;
+    height: 330px;
+    object-fit: cover;
+}
+
+/* Order details */
+.user-info, .contact-info, .order-info {
+    border-radius: 10px;
+    background-color: rgba(255, 238, 238, 0.8);
+    box-shadow: 5px 5px 20px gainsboro;
+}
+.mark {
+    background-color: #F29CB9;
+}

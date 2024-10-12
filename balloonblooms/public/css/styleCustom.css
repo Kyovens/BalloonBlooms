@@ -1,0 +1,20 @@
+.mytheme {
+    color : #9F787A;
+    width: 275px;
+    padding: 8px;
+    margin-left: -50px;
+    border-radius: 0px 10px 10px 0px;
+}
+.ref-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .3)
+}
+mark {
+    background-color: #fff;
+    font-family: Raleway;
+}
+input[type='radio'], input[type='checkbox'] {
+    accent-color: #F29CB9 !important;
+    height: 20px !important;
+    width: 20px !important;
+    margin-right: 5px;
+}
