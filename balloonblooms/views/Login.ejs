@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/pages/BB_Effect3.png">
+    <title>Login - BallonBlooms CiViC</title>
+    <link rel="stylesheet" href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css">
+    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="/css/bulmaEdit.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <main id="app" class="container is-max-widescreen has-text-centered mb-5">
+        <h1 class="title my-4 is-size-2">Login to Your BB Account</h1>
+        <div class="columns has-text-left is-size-4">
+            <form action="/login" method="post" class="column is-6 is-offset-3" name="login">
+                <div class="field">
+                    <label for="">Username <span class="is-size-7">(ur front name + 4 digit phone number)</span> or Phone Number</label>
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input is-success is-medium" type="text" placeholder="username1234" name="username" autocomplete="off" required autofocus value="<%= user.username %>">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label for="">Password</label>
+                    <p class="control has-icons-left">
+                        <input class="input is-success is-medium" type="password" placeholder="pass***d" name="password" minlength="8" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <% if (message) { %>
+                    <div class="field">
+                        <span class="tag is-link is-vital is-size-6"> <%= message %> </span>
+                    </div>
+                <% } %>
+                <div class="field is-grouped mt-5">
+                    <p class="control">
+                        <a href="javascript:history.go(-1)" id="back" class="button is-primary is-medium">Back</a>
+                    </p>
+                    <p class="control">
+                        <button id="login" class="button is-success is-medium" onclick="loadLogin()">Login</button>
+                        <button id="load" class="button is-loading is-medium" style="display: none; width: 180px;"></button>
+                    </p>
+                </div>
+                <div class="field has-text-right">
+                    <p class="control">
+                        Don't have account yet? &nbsp;
+                        <a href="/signup" id="signup" class="button is-info is-small">Sign Up</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // login loading
+        let loadLogin = () => {
+            if (document.getElementsByName('username')[0].value!="" && document.getElementsByName('password')[0].value!="" && document.getElementsByName('password')[0].value.length >= 8) {
+                document.getElementById('login').style.display = "none"
+                document.getElementById('back').style.display = "none"
+                document.getElementById('load').style.display = "block"
+                setTimeout(() => {
+                    document.getElementById('load').style.display = "none"
+                    document.getElementById('back').style.display = "block"
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

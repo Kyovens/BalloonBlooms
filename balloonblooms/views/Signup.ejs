@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/public/img/pages/BB_Effect3.png">
+    <title>SignUp - BalloonBlooms CiViC</title>
+    <link rel="stylesheet" href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/bulmaEdit.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <main id="app" class="container is-max-widescreen has-text-centered mb-5">
+        <h1 class="title my-4 is-size-2">Make Your BB Account</h1>
+        <div class="columns has-text-left is-size-4">
+            <form method="post" class="column is-6 is-offset-3">
+                <div class="field">
+                    <label for="yourname">Full Name</label>
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input is-success is-medium" type="text" placeholder="Your Name" name="yourname" autocomplete="off" required autofocus>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label for="wanum">Phone Number <span class="is-size-7">(WA number priority)</span></label>
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input is-success is-medium" type="tel" placeholder="08123456789" name="wanum" autocomplete="off" minlength="8" pattern="[0-9]+" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-phone"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label for="password">Password <span class="is-size-7">(min. 8 characters)</span></label>
+                    <p class="control has-icons-left">
+                        <input class="input is-success is-medium" type="password" id="password" onchange="checkPass()" placeholder="pass***d" name="password" minlength="8" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <label for="confirmpassword">Confirm Password <span class="is-size-7"></span></label>
+                    <p class="control has-icons-left">
+                        <input class="input is-success is-medium" type="password" id="confpass" onkeyup="checkPass()" placeholder="pass***d" name="confirmpassword" minlength="8" title="Password not match" required>
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <% if (message) { %>
+                    <div class="field">
+                        <span class="tag is-link is-vital is-size-6"><%= message %></span>
+                    </div>
+                <% } %>
+                <div class="field is-grouped mt-5">
+                    <p class="control">
+                        <a href="/login" id="back" class="button is-primary is-medium">Back</a>
+                    </p>
+                    <p class="control">
+                        <button id="submit" class="button is-success is-medium" onclick="loadSubmit()">Submit</button>
+                        <button id="load" class="button is-loading is-medium" style="display: none; width: 180px;"></button>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        let loadSubmit = () => {
+            document.getElementsByClassName('input').forEach(input => {
+                if (input.value.trim() != "") {
+                    document.getElementById('submit').style.display = "none"
+                    document.getElementById('back').style.display = "none"
+                    document.getElementById('load').style.display = "block"
+                    document.getElementById('load').delay(5000)
+                }
+            });
+        }
+
+        // check kecocokan password n confirm password
+        function checkPass() {
+            let pass = document.getElementById('password')
+            let confirm = document.getElementById('confpass')
+            let submit = document.getElementById('submit')
+            if (confirm.value != pass.value) {
+                confirm.setCustomValidity("Password doesn't match")
+            }
+            else {
+                confirm.setCustomValidity("")
+            }
+        }
+    </script>
+</body>
+</html>
