@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/pages/BB_Effect3.png">
+    <title>Custom - BalloonBlooms CiViC</title>
+    <link rel="stylesheet" href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/bulmaEdit.css">
+    <link rel="stylesheet" href="/css/styleCustom.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header is-size-5" style="position: relative;">
+        <nav class="navbar is-info is-fluid py-2">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-item logo-size ml-5">
+                    <img src="/img/pages/BB_Effect1.png" alt="BalloonBlooms-CiViC">
+                </a>
+                <div class="navbar-burger burger mr-3" data-target="navbarMenu">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="navbar-menu mx-5 has-text-centered" id="navbarMenu">                    
+                <div class="navbar-start">
+                    <a class="navbar-item m-2 has-text-black" href="/">Home</a>
+                    <a class="navbar-item m-2 has-text-black" href="/products">Products</a>
+                    <% if (user) { %>
+                        <a class="navbar-item is-active m-2" href="/user/custom/BBC2111">Custom</a>
+                        <% if (!user.isAdmin) { %>
+                            <a class="navbar-item m-2 has-text-black" href="/user/wishlist">Wishlist</a>
+                            <a class="navbar-item m-2 has-text-black" href="/user/order/order-list">Order List</a>
+                        <% } %>
+                    <% } %>
+                    <% if (user.isAdmin) { %>
+                        <a class="navbar-item m-2 has-text-black" href="/admin/order/order-list">Order List</a>
+                        <a class="navbar-item m-2 has-text-black" href="/admin/user-list">User List</a>
+                    <% } %>
+                    <a class="navbar-item m-2 has-text-black" href="/about">About</a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <div class="mx-3 has-text-black" id="userEmail">
+                                <%= user.username %>
+                            </div>
+                            <%- (!user ? '<a href="/login" class="button is-light"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-user"></i></span>Login</a>' : '<a href="/logout" id="btnlogout" class="button is-light" onclick="loadLogout()"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-right-from-bracket"></i></span>Logout</a>') %>
+                            <button id="btnload" class="button is-loading" style="display: none; width: 150px;"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="app" class="container is-max-widescreen has-text-centered mb-5">
+        <div class="has-background-primary mt-4 py-2 has-text-weight-bold" style="font-size: 40px;">
+            Let's Custom The Way You Like It !
+        </div>
+        <div class="container">
+            <h2 class="mt-4 mb-5 has-text-left is-size-4 mytheme openSans"><span class="pl-6 ml-6 text-pink has-text-weight-bold">REFERENCES</span></h2>
+            <div class="container">
+                <div class="m-auto p-2 card card-content ref-card rounded columns column is-6">
+                    <div class="ml-2 column">
+                        <img src="/img/products/<%= product.code %>.jpg" alt="Reference Image Error" class="rounded" title="<%= product.name %>" style="width: 250px; height: 250px; object-fit: cover;"/>
+                    </div>
+                    <div class="column is-7 media-content">
+                        <div class="has-text-left">
+                            <h5 class="title has-text-weight-bold is-4 ml-2 openSans"><%= product.name %></h5>
+                            <table class="subtitle is-6 m-2">
+                                <tr>
+                                    <td style="min-width: 63px">Price <small>(est)</small></td>
+                                    <td class="px-3"> : </td>
+                                    <td id="price" class="openSans"><%= product.price %></td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top">Include</td>
+                                    <td style="vertical-align: top" class="px-3"> : </td>
+                                    <td class="subtitle is-6 openSans">
+                                        <ul>
+                                            <% product.include.forEach(desc => { %>
+                                                <li style="list-style-type: circle;" class="ml-4"><small><%= desc %> </small></li>
+                                            <% }) %>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="has-background-primary mt-6 py-2 has-text-weight-bold my-5 raleway" style="font-size: 40px;">
+            CUSTOMIZATION
+        </div>
+        <form action="/user/custom/<%= product.code %>" method="post" class="has-text-left is-size-4" onsubmit="return window.confirm(`${document.getElementsByName('contact_name')[0].value}, are you sure want to placed an order to BallonBlooms ?`)" enctype="multipart/form-data">
+            <fieldset <% if (user.isAdmin) { %> disabled title="Only user can make an order" <% } %>>
+                <div class="mx-6">
+                    <p class="has-text-grey is-size-3"><mark class="is-bold">BALLOON</mark></p>
+                    <table class="mt-2 mx-6 mb-5">
+                        <tr>
+                            <td>Type</td>
+                            <td class="px-5"> : </td>
+                            <td class="px-5">
+                                <div class="control is-size-5 is-size-5">
+                                    <label class="radio" for="balloon_shape1">
+                                        <input class="radio" type="radio" name="balloon_shape" id="balloon_shape1" value="Original" required/>
+                                        Original
+                                    </label>
+                                </div>                                
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="balloon_shape2">
+                                        <input class="radio" type="radio" name="balloon_shape" id="balloon_shape2" value="Heart-Shaped" required/>
+                                        Heart-Shaped
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="balloon_shape3">
+                                        <input class="radio" type="radio" name="balloon_shape" id="balloon_shape3" value="Star-Shaped" required/>
+                                        Star-Shaped
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Color</td>
+                            <td class="px-5"> : </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="balloon_color1">
+                                        <input class="radio" type="radio" name="balloon_color" id="balloon_color1" value="Red" required/>
+                                        <div class="radio mr-1" style="background-color: #F01313; width: 23px;"">&nbsp;</div>
+                                        Red
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="balloon_color2">
+                                    <input class="radio" type="radio" name="balloon_color" id="balloon_color2" value="Rose-Gold" required/>
+                                    <div class="radio mr-1" style="background-color: #DFA28E; width: 23px;"">&nbsp;</div>
+                                        Rose-Gold
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="balloon_color3">
+                                        <input class="radio" type="radio" name="balloon_color" id="balloon_color3" value="Gold" required/>
+                                        <div class="radio mr-1" style="background-color: #FFD467; width: 23px;"">&nbsp;</div>
+                                        Gold
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mx-6">
+                    <p class="has-text-grey is-size-3 mt-4"><mark class="is-bold">RIBBON</mark></p>
+                    <table class="mt-2 mx-6 mb-5">
+                        <tr>
+                            <td>Type</td>
+                            <td class="px-5"> : </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="ribbon_type1">
+                                        <input class="radio" type="radio" name="ribbon_type" id="ribbon_type1" value="Satin Ribbon" required/>
+                                        Satin Ribbon
+                                    </label>
+                                </div>                                
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="ribbon_type2">
+                                        <input class="radio" type="radio" name="ribbon_type" id="ribbon_type2" value="Grosgrain Ribbon" required/>
+                                        Grosgrain Ribbon
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Color</td>
+                            <td class="px-5"> : </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="ribbon_color1">
+                                        <input class="radio" type="radio" name="ribbon_color" id="ribbon_color1" value="Red" required/>
+                                        <div class="radio mr-1" style="background-color: #F01313; width: 23px;"">&nbsp;</div>
+                                        Red
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="ribbon_color2">
+                                        <input class="radio" type="radio" name="ribbon_color" id="ribbon_color2" value="Rose-Gold" required/>
+                                        <div class="radio mr-1" style="background-color: #DFA28E; width: 23px;"">&nbsp;</div>
+                                        Rose-Gold
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="ribbon_color3">
+                                        <input class="radio" type="radio" name="ribbon_color" id="ribbon_color3" value="Gold" required/>
+                                        <div class="radio mr-1" style="background-color: #FFD467; width: 23px;"">&nbsp;</div>
+                                        Gold
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mx-6">
+                    <p class="has-text-grey is-size-3 mt-4"><mark class="is-bold">ACCESSORIES</mark> <span class="has-text-grey is-size-6">(optional)</span></p>
+                    <table class="mt-2 mx-6 mb-5">
+                        <tr>
+                            <td>Type</td>
+                            <td class="px-5"> : </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="checkbox" for="accessories1">
+                                        <input class="checkbox" type="checkbox" name="accessories" id="accessories1" value="Doll-Bear"/>
+                                        Doll-Bear
+                                    </label>
+                                </div>                                
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="checkbox" for="accessories2">
+                                        <input class="checkbox" type="checkbox" name="accessories" id="accessories2" value="Flowers"/>
+                                        Flowers
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="checkbox" for="accessories3">
+                                        <input class="checkbox" type="checkbox" name="accessories" id="accessories3" value="Snacks"/>
+                                        Snacks
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="checkbox" for="accessories4">
+                                        <input class="checkbox" type="checkbox" name="accessories" id="accessories4" value="Money"/>
+                                        Money
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="form-floating mt-2 mx-6 mb-5">
+                        <textarea class="textarea is-success" placeholder="Leave a NOTE here" id="floatingTextarea2" style="height: 80px;" name="note" autoComplete="off"></textarea>
+                        <label for="floatingTextarea2">Note Here ...</label>
+                    </div>
+                </div>
+                <div class="mx-6">
+                    <p class="has-text-grey is-size-3 mt-4"><mark class="is-bold">CELLOPHANE</mark></p>
+                    <table class="mt-2 mx-6 mb-5">
+                        <tr>
+                            <td rowspan="2" class="pr-5">Color</td>
+                            <td rowspan="2">:</td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="cellophane_color1">
+                                        <input class="radio" type="radio" name="cellophane_color" id="cellophane_color1" value="Red" required/>
+                                        <div class="radio mr-1" style="background-color: #F01313; width: 23px;"">&nbsp;</div>
+                                        Red
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="cellophane_color2">
+                                        <input class="radio" type="radio" name="cellophane_color" id="cellophane_color2" value="Pink" required/>
+                                        <div class="radio mr-1" style="background-color: #FEBBD3; width: 23px;"">&nbsp;</div>
+                                        Pink
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="cellophane_color3">
+                                        <input class="radio" type="radio" name="cellophane_color" id="cellophane_color3" value="Purple" required/>
+                                        <div class="radio mr-1" style="background-color: #EDC7FF; width: 23px;"">&nbsp;</div>
+                                        Purple
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="cellophane_color4">
+                                        <input class="radio" type="radio" name="cellophane_color" id="cellophane_color4" value="Blue" required/>
+                                        <div class="radio mr-1" style="background-color: #B8E5FF; width: 23px;"">&nbsp;</div>
+                                        Blue
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="cellophane_color5">
+                                        <input class="radio" type="radio" name="cellophane_color" id="cellophane_color5" value="Nude" required/>
+                                        <div class="radio mr-1" style="background-color: #DEA796; width: 23px;"">&nbsp;</div>
+                                        Nude
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="cellophane_color6">
+                                        <input class="radio" type="radio" name="cellophane_color" id="cellophane_color6" value="Green Mint" required/>
+                                        <div class="radio mr-1" style="background-color: #BBFED2; width: 23px;"">&nbsp;</div>
+                                        Green Mint
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="px-5">
+                                <div class="control is-size-5">
+                                    <label class="radio" for="cellophane_color7">
+                                        <input class="radio" type="radio" name="cellophane_color" id="cellophane_color7" value="Brown" required/>
+                                        <div class="radio mr-1" style="background-color: #DEBD88; width: 23px;"">&nbsp;</div>
+                                        Brown
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="mx-6">
+                    <p class="has-text-grey is-size-3 mt-4"><mark class="is-bold">CARD</mark> <span class="has-text-grey is-size-6">(optional)</span></p>
+                    <div class="form-floating mt-2 mx-6 mb-5">
+                        <textarea class="textarea is-success" placeholder="Leave your card text here" id="floatingTextarea2" style="height: 100px;" name="card" autoComplete="off"></textarea>
+                        <label for="floatingTextarea2">Write Here ...</label>
+                    </div>
+                </div>
+                <div class="mx-6">
+                    <p class="has-text-grey is-size-3 mt-4"><mark class="is-bold">PORTRAIT ART</mark> <span class="has-text-grey is-size-6">(optional)</span></p>
+                    <div class="mt-2 mx-6 mb-5">
+                        <div class="file has-name is-fullwidth is-size-5 is-success">
+                            <label class="file-label">
+                                <input class="file-input" type="file" name="portrait_art" accept=".png, .jpg, .jpeg">
+                                <span class="file-cta">
+                                    <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                    </span>
+                                    <span class="file-label">
+                                        Choose an image file…
+                                    </span>
+                                </span>
+                                <span class="file-name has-text-grey">100% Hand-Drawn Portrait Art ❤</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="has-background-primary mt-6 py-2 my-5 has-text-weight-bold has-text-centered raleway" style="font-size: 40px;">
+                    CONTACT INFORMATION
+                </div>
+                <div class="columns is-size-4">
+                    <div class="column is-10 is-offset-1">
+                        <div class="m-3 columns is-vcentered">
+                            <label for="contact_name" class="column is-4">Name</label>:
+                            <div class="column ml-4">
+                                <input type="text" class="input is-success" name="contact_name" placeholder="Please Enter Your Full Name" autoComplete="off" required>
+                            </div>
+                        </div>
+                        <div class="m-3 columns is-vcentered">
+                            <label for="contact_num" class="column is-4">Hp. Number</label>:
+                            <div class="column ml-4">
+                                <input type="tel" class="input is-success" name="contact_num" placeholder="081234567890" pattern="[0-9]+" minlength="8" autoComplete="off" required/>
+                            </div>
+                        </div>
+                        <div class="m-3 columns is-vcentered">
+                            <label for="address" class="column is-4">Address <span class="is-size-6">(for delivery)</span></label>:
+                            <div class="column ml-4">
+                                <input type="text" class="input is-success" name="address" placeholder="88 Anyway St." autoComplete="off" required />
+                            </div>
+                        </div>
+                        <div class="m-3 columns">
+                            <label for="payaccount" class="column is-4">Payment Method</label><span class="mt-2">:</span>
+                            <div class="column ml-4 is-size-6">
+                                <div class="columns is-multiline">
+                                    <div class="control is-size-5 column is-narrow">
+                                        <input class="radio" type="radio" name="payment_method" id="method1" value="COD" onclick="handlePayment()" required/>
+                                        <label class="radio" for="method1">Cash On Delivery</label>
+                                    </div>
+                                    <div class="control is-size-5 column is-narrow">
+                                        <input class="radio" type="radio" name="payment_method" id="method2" value="Virtual Transfer" onclick="handlePayment()" required/>
+                                        <label class="radio" for="method2">Virtual Account Transfer</label>
+                                    </div>
+                                    <div class="control is-size-5 column is-narrow">
+                                        <input class="radio" type="radio" name="payment_method" id="method3" value="E-Banking" onclick="handlePayment()" required/>
+                                        <label class="radio" for="method3">Internet Banking</label>
+                                    </div>
+                                    <div class="control is-size-5 column is-narrow">
+                                        <input class="radio" type="radio" name="payment_method" id="method4" value="E-Wallet" onclick="handlePayment()" required/>
+                                        <label class="radio" for="method4">E-Wallet</label>
+                                    </div>
+                                </div>
+                                <input type="text" class="input is-success is-size-6 mt-1" id="payment" name="payaccount" placeholder="Please Input Your Account Number & Name (e.g. : 12345678-Blooms)" pattern="[0-9]+-[A-Za-z\s]+" autoComplete="off" title="Format : AccNumber-AccName" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="m-3 columns is-vcentered">
+                            <label for="rec_date" class="column is-4">Received Date <span class="is-size-6">(estimated)</span></label>:
+                            <div class="column is-narrow ml-4"><span class="is-size-5">5 to 7 days</span> &ensp;or&ensp; <span class="is-size-5">set ur date</span></div>
+                            <div class="column">
+                                <input type="date" class="input is-success is-size-5" name="rec_date" required/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="has-background-primary mt-6 py-2 my-5 has-text-centered has-text-weight-bold raleway" style="font-size: 40px;">
+                    ADDITIONAL MESSAGE
+                </div>
+                <div class="mx-6">
+                    <p class="has-text-grey is-size-3 mt-4"><mark class="is-bold">VOUCHER</mark> <span class="has-text-grey is-size-6">(optional)</span></p>
+                    <div class="columns mx-6 mb-5 is-vcentered">
+                        <div class="column is-narrow">
+                            <label for="voucode">Voucher Code *</label></div>
+                        <div class="column is-narrow">
+                            <input class="input is-success" placeholder="example : BB123456" id="voucode" name="voucode" autoComplete="off" pattern="[a-zA-Z]{2}[0-9]{6}" title="format : 2ALPHABETS6NUMBERS">
+                        </div>
+                        <div class="column is-narrow mt-3">
+                            <small class="has-text-grey is-size-6">* the code you enter will be validated by BalloonBlooms’s admin to claim your discount</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="mx-6 is-size-5">
+                    <p class="has-text-grey is-size-3 mt-4"><mark class="is-bold">IMPORTANT !!!</mark></p>
+                    <div class="form-check mt-2 mx-6">
+                        <label class="checkbox" for="term">
+                            <input class="checkbox" type="checkbox" name="term" id="term" required/>
+                            <strong>
+                                I agree to all the terms and conditions before placing the order **
+                            </strong>
+                        </label>
+                    </div>
+                    <div class="form-check mt-1 mx-6 mb-5">
+                        <label class="checkbox" for="attention">
+                            <input class="checkbox" type="checkbox" name="attention" id="attention" required/>
+                            <strong>
+                                I have checked all of my customization and place a real order by submitting to this form **
+                            </strong>
+                        </label>
+                    </div>
+                    <p class="mx-6 is-size-6">** required</p>
+                    <p class="mt-1 mx-6 is-size-6"><mark class="">*** NOTE : The price above is just an estimation. We will chat you after your order is placed and the price is negotiable.</mark></p>
+                </div>
+                <div class="container has-text-centered">
+                    <button type="submit" class="button is-success is-rounded seeall mt-5 mb-3 has-text-weight-bold is-size-5">Place Order Now</button><br>
+                </div>
+            </fieldset>
+        </form>
+        <a href="/products" class="button is-secondary is-rounded seeall mx-5 has-text-weight-bold is-size-5" <% if (!user.isAdmin) { %> onclick="return window.confirm('Are you sure want to cancel your order?')"<% } %>>Cancel</a>
+    </main>
+
+    <footer class="footer has-background-success has-text-centered has-text-black is-size-5">
+        <div class="columns">
+            <div class="column mx-5">
+                <p class="is-size-5 is-vcentered">
+                    <img src="/img/pages/BB_Effect1.png" alt="" width="80px" height="85px">
+                </p>
+                <b class="mt-5">BALLOON BLOOMS</b>
+                <p>3e Tembaga St., Medan City, North Sumatra, Indonesia</p>
+                <a href="tel: 087776462111" class="text-decoration-none text-pink is-size-4 has-text-weight-bold">Call : +62 877-7646-2111</a><br/>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-weight-bold mt-4 mb-2">Quick Links</p>
+                <ul>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/">Home</a>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/products">Products</a>
+                    </li>
+                    <li>
+                        <% if (user) { %>
+                            <a class="text-decoration-none m-2" href="/user/custom/BBC2111">Custom</a>
+                        <% } %>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-left has-text-weight-bold mt-4 ml-6 pl-5">Subscribe Us</p>
+                <ul>
+                    <li class="mt-2">
+                        <a href="https://www.instagram.com/balloonblooms_medan/" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/ig-image.png" alt="ig" width='40px' class="filter-ic">&ensp;balloonblooms_medan
+                        </a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="mailto: info@balloonblooms.com" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/email-image.png" alt="em" width='40px' class="filter-ic">&ensp;info@balloonblooms.com
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+    <script>
+        // check payment method
+        function handlePayment() {
+            if (document.getElementById("method1").checked) {
+                document.getElementById("payment").style.display = 'none'
+                document.getElementById("payment").required = false
+            }
+            else {
+                document.getElementById("payment").style.display = 'block'
+                document.getElementById("payment").focus()
+                document.getElementById("payment").required = true
+            }
+        }
+    </script>
+</body>
+</html>
