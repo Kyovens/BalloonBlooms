@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/public/img/pages/BB_Effect3.png">
-    <title>Custom - BalloonBlooms CiViC</title>
+    <link rel="icon" href="/img/pages/BB_Effect3.png">
+    <title>Wishlist - BalloonBlooms CiViC</title>
     <link rel="stylesheet" href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="stylesheet" href="/css/bulmaEdit.css">
@@ -29,9 +29,9 @@
                     <a class="navbar-item m-2 has-text-black" href="/">Home</a>
                     <a class="navbar-item m-2 has-text-black" href="/products">Products</a>
                     <% if (user) { %>
-                        <a class="navbar-item is-active m-2" href="/user/custom/BBC2111">Custom</a>
+                        <a class="navbar-item m-2 has-text-black" href="/user/custom/BBC2111">Custom</a>
                         <% if (!user.isAdmin) { %>
-                            <a class="navbar-item m-2 has-text-black" href="/user/wishlist">Wishlist</a>
+                            <a class="navbar-item is-active m-2" href="/user/wishlist">Wishlist</a>
                             <a class="navbar-item m-2 has-text-black" href="/user/order/order-list">Order List</a>
                         <% } %>
                     <% } %>
@@ -56,15 +56,42 @@
         </nav>
     </header>
 
-    <main id="app" class="container is-max-widescreen has-text-centered my-6">
-        <h1 class="title">Thank You For Ordering From Us</h1>
-        <p class="is-size-4">Your form has been submitted and we will response your ordered as soon as possible</p>
-        <p class="my-5 is-size-5">For more information, chat to WhatsApp number 
-            <a href="tel: +6287776462111" class="text-decoration-none text-pink is-size-5 has-text-weight-bold"> +(62) 877-7646-2111</a>
-        </p>
-        <a href="/products" class="button is-success p-3 px-4 m-3 is-size-5">Check another Products</a>
-        <a href="/" class="button is-primary p-3 px-4 m-3 is-size-5">Back to Home Page</a>
-        <a href="/user/order/order-list" class="button is-info p-3 px-5 m-3 is-size-5">Check my Order(s)</a>
+    <main id="app" class="container is-max-widescreen has-text-left my-5">
+        <% if (product.length == 0) { %>
+            <div class="has-text-centered">
+                <p class="is-size-3 mt-6 mb-5">Belum ada produk yang ditambahkan ke Wishlist</p>
+                <a href="/products" class="button is-primary is-medium mx-3">Back to Products</a>
+            </div>
+        <% } else { %>
+            <p class="is-size-2 has-text-centered">Welcome to your Wishlist !</p>
+            <p class="is-size-5 has-text-centered has-text-grey mb-5">Don't let your favorite product(s) idle too long >v<</p>
+            <% product.forEach(item => { %>
+                <div class="box columns column is-6 is-offset-3 mb-5">
+                    <article class="media">
+                        <div class="media-left">
+                            <img src="/img/products/<%= item.code %>.jpg" alt="<%= item.code %>" style="width: 140px; height: 165px; object-fit: cover;">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <p>
+                                    <strong class="is-size-4"><%= item.name %></strong> <small class="media-right"><%= item.code %></small>
+                                    <br>
+                                    <span class="prices is-size-5"><%= item.price %></span>
+                                    <br>
+                                    <%= item.include.join(', ') %> 
+                                </p>
+                            </div>
+                            <div>
+                                <a href="/user/custom/<%= item.code %>" class="button is-primary">CUSTOM</a>
+                                <a href="/product/comments/<%= item.code %>" class="button is-secondary">REVIEWS</a>
+                                <button class="button is-vital" onclick="unlike('<%= item.code %>')">Remove from Wishlist</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            <% }) %>
+        <% } %>
     </main>
 
     <footer class="footer has-background-success has-text-centered has-text-black is-size-5">
@@ -114,9 +141,18 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/js/script.js"></script>
     <script>
-        //
+        // remove from wishlist
+        function unlike(code) {
+            axios.delete('/user/wishlist/remove/' + code).then((result) => {
+                location.reload()
+            }).catch((err) => {
+                alert('something went wrong !!!')
+            });
+        }
+
     </script>
 </body>
 </html>
