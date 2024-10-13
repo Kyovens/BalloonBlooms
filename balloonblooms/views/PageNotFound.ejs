@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/pages/BB_Effect3.png">
+    <meta http-equiv="refresh" content="3;url=/">  <!--Redirecting page in n seconds-->
+    <title>Page Not Found - BalloonBlooms CiViC</title>
+    <link rel="stylesheet" href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/bulmaEdit.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header is-size-5">
+        <nav class="navbar is-info is-fluid py-2">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-item logo-size ml-5">
+                    <img src="/img/pages/BB_Effect1.png" alt="BalloonBlooms-CiViC">
+                </a>
+                <div class="navbar-burger burger mr-3" data-target="navbarMenu">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="navbar-menu mx-5 has-text-centered" id="navbarMenu">                    
+                <div class="navbar-start">
+                    <a class="navbar-item m-2 has-text-black" href="/">Home</a>
+                    <a class="navbar-item m-2 has-text-black" href="/products">Products</a>
+                    <% if (user) { %>
+                        <a class="navbar-item m-2 has-text-black" href="/user/custom/BBC2111">Custom</a>
+                        <% if (!user.isAdmin) { %>
+                            <a class="navbar-item m-2 has-text-black" href="/user/wishlist">Wishlist</a>
+                            <a class="navbar-item m-2 has-text-black" href="/user/order/order-list">Order List</a>
+                        <% } %>
+                    <% } %>
+                    <% if (user.isAdmin) { %>
+                        <a class="navbar-item m-2 has-text-black" href="/admin/order/order-list">Order List</a>
+                        <a class="navbar-item m-2 has-text-black" href="/admin/user-list">User List</a>
+                    <% } %>
+                    <a class="navbar-item m-2 has-text-black" href="/about">About</a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <div class="mx-3 has-text-black" id="userEmail">
+                                <%= user.username %>
+                            </div>
+                            <%- (!user ? '<a href="/login" class="button is-light"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-user"></i></span>Login</a>' : '<a href="/logout" id="btnlogout" class="button is-light" onclick="loadLogout()"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-right-from-bracket"></i></span>Logout</a>') %>
+                            <button id="btnload" class="button is-loading" style="display: none; width: 150px;"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="app" class="container is-max-widescreen has-text-centered mb-5">
+        <img src="/img/pages/404notfound.png" alt="404 Page Not Found" width="50%" class="mt-6 mb-1">
+        <h1 class="title is-size-1 raleway">Page Not Found</h1>
+        <p class="mb-3 is-size-5">Redirecting to Home in 3 secs ...</p>
+    </main>
+
+    <footer class="footer has-background-success has-text-centered has-text-black is-size-5">
+        <div class="columns">
+            <div class="column mx-5">
+                <p class="is-size-5 is-vcentered">
+                    <img src="/img/pages/BB_Effect1.png" alt="" width="80px" height="85px">
+                </p>
+                <b class="mt-5">BALLOON BLOOMS</b>
+                <p>3e Tembaga St., Medan City, North Sumatra, Indonesia</p>
+                <a href="tel: 087776462111" class="text-decoration-none text-pink is-size-4 has-text-weight-bold">Call : +62 877-7646-2111</a><br/>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-weight-bold mt-4 mb-2">Quick Links</p>
+                <ul>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/">Home</a>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/products">Products</a>
+                    </li>
+                    <li>
+                        <% if (user) { %>
+                            <a class="text-decoration-none m-2" href="/user/custom/BBC2111">Custom</a>
+                        <% } %>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-left has-text-weight-bold mt-4 ml-6 pl-5">Subscribe Us</p>
+                <ul>
+                    <li class="mt-2">
+                        <a href="https://www.instagram.com/balloonblooms_medan/" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/ig-image.png" alt="ig" width='40px' class="filter-ic">&ensp;balloonblooms_medan
+                        </a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="mailto: info@balloonblooms.com" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/email-image.png" alt="em" width='40px' class="filter-ic">&ensp;info@balloonblooms.com
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+    <script>
+        //
+    </script>
+</body>
+</html>
