@@ -1,0 +1,113 @@
+figure {
+    background: #ffffff;
+    display: inline-block;
+    margin: 5px;
+    padding: 12px;
+    max-width: 240px;
+    height: 420px;
+    text-align: left;
+    text-decoration: none;
+    -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
+    -webkit-transition: all .20s linear;
+    -moz-transition: all .20s linear;
+    transition: all .20s linear;
+    position: relative;
+}
+figcaption {
+    color: #333;
+    font-size: 22px;
+    font-weight: bold;
+    position: relative;
+    top: 5px;
+    line-height: 1.2;
+    margin: 8px auto;
+}
+input[type="submit"] {
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 8px 15px;
+    background-color: #F29CB9;
+    border-radius: 5px;
+    cursor: pointer;
+}
+input[type="button"] {
+    color: #F29CB9;
+    padding: 6px 13px;
+    background-color: white;
+    border: 2px solid #F29CB9;
+    border-radius: 5px;
+    cursor: pointer;
+}
+figure img.fig-img {
+    display: block;
+    width: 220px;
+    height: 270px;
+    object-fit: cover;
+}
+figure:hover {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    transform: scale(1.2);
+    -webkit-box-shadow: 0 10px 20px rgba(226, 186, 194, 0.6);
+    -moz-box-shadow: 0 10px 20px rgba(226, 186, 194, 0.6);
+    box-shadow: 0 10px 20px rgba(226, 186, 194, 0.6);
+}
+
+
+figure div.desc {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    height: 290px;
+    opacity: 0;
+    padding: 8% 10%;
+    font-size: 18px;
+}
+figure div.desc>div{
+    position: absolute;
+    bottom: 0%;
+    left: 6%;
+    padding: 5%;
+}
+figure span.like-me{
+    position: absolute;
+    bottom: -1%;
+    right: 0;
+    padding: 5%;
+    cursor: pointer;
+}
+figure div.icon{
+    position: absolute;
+    bottom: 2%;
+    right: 10%;
+}
+figure div.icon i {
+    color: #F29CB9;
+}
+figure:hover div.desc{
+    opacity: 1;
+    transition: 0.5s ease;
+}
+a figure{
+    max-width: 240px;
+    min-width: 240px;
+}
+figure>i {
+    padding-top: 60%;
+}
+
+
+.mytheme {
+    width: 275px;
+    padding: 8px;
+    margin-left: -50px;
+    border-radius: 0px 10px 10px 0px;
+}
+#keyword::placeholder {
+    color: #E2BAC2;
+}

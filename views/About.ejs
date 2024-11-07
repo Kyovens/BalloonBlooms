@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/pages/BB_Effect3.png">
+    <title>About - BalloonBlooms CiViC</title>
+    <link rel="stylesheet" href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/bulmaEdit.css">
+    <link rel="stylesheet" href="/css/stylePolaroid.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header is-size-5" style="position: relative;">
+        <nav class="navbar is-info is-fluid py-2">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-item logo-size ml-5">
+                    <img src="/img/pages/BB_Effect1.png" alt="BalloonBlooms-CiViC">
+                </a>
+                <div class="navbar-burger burger mr-3" data-target="navbarMenu">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="navbar-menu mx-5 has-text-centered" id="navbarMenu">                    
+                <div class="navbar-start">
+                    <a class="navbar-item m-2 has-text-black" href="/">Home</a>
+                    <a class="navbar-item m-2 has-text-black" href="/products">Products</a>
+                    <% if (user) { %>
+                        <a class="navbar-item m-2 has-text-black" href="/user/custom/BBC2111">Custom</a>
+                        <% if (!user.isAdmin) { %>
+                            <a class="navbar-item m-2 has-text-black" href="/user/wishlist">Wishlist</a>
+                            <a class="navbar-item m-2 has-text-black" href="/user/order/order-list">Order List</a>
+                        <% } %>
+                    <% } %>
+                    <% if (user.isAdmin) { %>
+                        <a class="navbar-item m-2 has-text-black" href="/admin/order/order-list">Order List</a>
+                        <a class="navbar-item m-2 has-text-black" href="/admin/user-list">User List</a>
+                    <% } %>
+                    <a class="navbar-item is-active m-2" href="/about">About</a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <div class="mx-3 has-text-black" id="userEmail">
+                                <%= user.username %>
+                            </div>
+                            <%- (!user ? '<a href="/login" class="button is-light"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-user"></i></span>Login</a>' : '<a href="/logout" id="btnlogout" class="button is-light" onclick="loadLogout()"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-right-from-bracket"></i></span>Logout</a>') %>
+                            <button id="btnload" class="button is-loading" style="display: none; width: 150px;"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="app" class="container is-max-widescreen has-text-centered my-5 mx-6">
+        <img src="https://freepngimg.com/thumb/balloon/130589-balloon-vector-colorful-free-hq-image.png" alt="Balloon Blooms CiViC" class="px-6" width="85%">
+        <h2 class="is-size-2 sourceBold">BalloonBlooms</h2>
+        <h4 class="is-size-5 raleway">by CiViC</h4>
+        <p class="is-size-4 mx-6 mt-5 mb-6 px-2 raleway">BalloonBlooms is a place where we can custom balloon parcel according to client's requests.<br>What's more, you can add handdrawn potrait art sketch in it for their beloved ones in their special days, like graduation days, birthdays, anniversary days, and so on.
+        </p>
+        
+        <h2 class="title has-text-left ml-6"><span class="px-2 py-1">Team</span></h2>
+        <div class="columns is-multiline pl-6 ml-6 my-5">
+            <figure class="column is-3 m-5 has-text-centered" title="BalloonBlooms">
+                <img src="/img/pages/owner.jpg" alt="BalloonBlooms' photo" class="fig-img">
+                <figcaption class="raleway">Lydia Auw</figcaption>
+                <div class="is-size-6 openSans">as balloonblooms</div>
+                <div class="is-size-5 openSans mt-4 has-text-centered">
+                    <a href="https://www.instagram.com/lydia_auwyang" target="_blank" class="columns is-vcentered column is-10 is-offset-1 is-size-6">
+                        <img src="/img/pages/ig-image.png" alt="ig" width='30px' class="mr-2 filter-ic"> @lydia_auwyang
+                    </a>
+                </div>
+                <div class="desc has-text-justified">
+                    Hi, I'm Lydia Auw. <br>I am the <b>founder and owner</b> of BalloonBlooms. Thank you so much for choosing BalloonBlooms.
+                    <br>
+                    <br>
+                    <span class="is-size-6 has-text-grey beVietnam">with &hearts; : Lydia</span>
+                </div>
+            </figure>
+            <figure class="column is-3 m-5 has-text-centered" title="Cindy Sintiya">
+                <img src="/img/pages/cindy.jpg" alt="Cindy's photo" class="fig-img">
+                <figcaption class="raleway">Cindy Sintiya</figcaption>
+                <div class="is-size-6 openSans">as cindy0347</div>
+                <div class="is-size-5 openSans mt-3">
+                    <a href="https://www.instagram.com/cindysintiyaa" target="_blank" class="columns is-vcentered column is-10 is-offset-1 is-size-6">
+                        <img src="/img/pages/ig-image.png" alt="ig" width='30px' class="ml-1 mr-2 filter-ic"> @cindysintiyaa
+                    </a>
+                </div>
+                <div class="desc has-text-justified">
+                    Hi, I'm Cindy Sintiya. <br>I am the <b>Front-End</b> & <b>Back-End Developer</b> of BalloonBlooms and part of <b>CiViC</b> team. Thank you so much for choosing BalloonBlooms.
+                    <br>
+                    <br>
+                    <span class="is-size-6 has-text-grey beVietnam">with &hearts; : Cindy</span>
+                </div>
+            </figure>
+            <figure class="column is-3 m-5 has-text-centered" title="Victoria Beatrice">
+                <img src="/img/pages/victoria.jpg" alt="Victoria's photo" class="fig-img">
+                <figcaption class="raleway">Victoria Beatrice</figcaption>
+                <div class="is-size-6 openSans">as victoria0515</div>
+                <div class="is-size-5 openSans mt-3">
+                    <a href="https://www.instagram.com/toriafic" target="_blank" class="columns is-vcentered column is-8 is-offset-2 is-size-6">
+                        <img src="/img/pages/ig-image.png" alt="ig" width='30px' class="mx-2 filter-ic"> @toriafic
+                    </a>
+                </div>
+                <div class="desc has-text-justified">
+                    Hi, I'm Victoria Beatrice. <br>I am the <b>Web-Designer</b> & <b>Front-End Developer</b> of BalloonBlooms and part of <b>CiViC</b> team. Thank you so much for choosing BalloonBlooms.
+                    <br>
+                    <br>
+                    <span class="is-size-6 has-text-grey beVietnam">with &hearts; : Victoria</span>
+                </div>
+            </figure>
+        </div>
+
+        <h2 class="title has-text-left ml-6"><span class="px-2 py-1">Location</span></h2>
+        <div class="columns is-multiline has-text-left pl-6 ml-6 my-2">
+            <div class="mapouter column is-narrow ml-6 mr-3"><div class="gmap_canvas">
+                <iframe width="500" height="350" id="gmap_canvas" src="https://maps.google.com/maps?q=jalan%20tembaga%20no%203&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+            </div></div>
+            <div class="column is-size-4">
+                <h3 class="has-text-weight-bold">Location Detail :</h3>
+                <p class="ml-6">3e Tembaga St.</p>
+                <p class="ml-6">Medan City</p>
+                <p class="ml-6">North Sumatra</p>
+                <p class="ml-6">Indonesia</p>
+                <p class="is-size-5"><a href="https://maps.google.com/maps?ll=3.586707,98.699551&z=13&t=m&hl=en-US&gl=US&mapclient=embed&q=Jl.%20Tembaga%20No.3%20Sei%20Rengas%20II%20Kec.%20Medan%20Area%20Kota%20Medan%2C%20Sumatera%20Utara%2020211" target="_blank">Go to maps</a></p>
+            </div>
+        </div>
+
+        <div class="live-chat rounded m-5 p-4">
+            <p class="is-size-6">Need help? Join us on our public live chat.</p>
+            <form action="live-chat/<% if (user.isAdmin) { %>ADMIN<% } else { %><%= user.username %><% } %>/Public" target="_blank">
+                <div class="columns m-1">
+                    <% if (!user) { %>
+                        <input type="text" class="input is-success is-small mr-1" placeholder="username here" pattern="[a-zA-Z]+" title="Input only alphabet, no space, or number" id="username" required autocomplete="off">
+                    <% } else if (user.isAdmin) { %>
+                        <input type="text" hidden id="username" value="ADMIN">
+                    <% } else { %>
+                        <input type="text" hidden id="username" value=<% if (user.isAdmin) { %>ADMIN<% } else { %> <%= user.username %><% } %>>
+                    <% } %>
+                    <button class="button is-success is-small">Join Now</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer has-background-success has-text-centered has-text-black is-size-5">
+        <div class="columns">
+            <div class="column mx-5">
+                <p class="is-size-5 is-vcentered">
+                    <img src="/img/pages/BB_Effect1.png" alt="" width="80px" height="85px">
+                </p>
+                <b class="mt-5">BALLOON BLOOMS</b>
+                <p>3e Tembaga St., Medan City, North Sumatra, Indonesia</p>
+                <a href="tel: 087776462111" class="text-decoration-none text-pink is-size-4 has-text-weight-bold">Call : +62 877-7646-2111</a><br/>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-weight-bold mt-4 mb-2">Quick Links</p>
+                <ul>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/">Home</a>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/products">Products</a>
+                    </li>
+                    <li>
+                        <% if (user) { %>
+                            <a class="text-decoration-none m-2" href="/user/custom/BBC2111">Custom</a>
+                        <% } %>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-left has-text-weight-bold mt-4 ml-6 pl-5">Subscribe Us</p>
+                <ul>
+                    <li class="mt-2">
+                        <a href="https://www.instagram.com/balloonblooms_medan/" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/ig-image.png" alt="ig" width='40px' class="filter-ic">&ensp;balloonblooms_medan
+                        </a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="mailto: info@balloonblooms.com" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/email-image.png" alt="em" width='40px' class="filter-ic">&ensp;info@balloonblooms.com
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+    <script>
+        // handle live-chat
+        document.getElementById('username').onkeyup = function () {
+            if (document.getElementById('username').value.toLocaleLowerCase() == 'admin') {
+                document.getElementById('username').setCustomValidity('You are not allowed to use this username')
+            }
+            else  {
+                document.getElementById('username').setCustomValidity('')
+                document.getElementsByTagName('form')[0].action = "/live-chat/"+document.getElementById('username').value+"/Public"
+            }
+        }
+    </script>
+</body>
+</html>

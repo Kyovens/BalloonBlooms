@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/img/pages/BB_Effect3.png">
+    <title>Order Detail - BalloonBlooms CiViC</title>
+    <link rel="stylesheet" href="https://www.unpkg.com/bulma@0.9.3/css/bulma.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/bulmaEdit.css">
+    <link rel="stylesheet" href="/css/styleOrder.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header is-size-5" style="position: relative;">
+        <nav class="navbar is-info is-fluid py-2">
+            <div class="navbar-brand">
+                <a href="/" class="navbar-item logo-size ml-5">
+                    <img src="/img/pages/BB_Effect1.png" alt="BalloonBlooms-CiViC">
+                </a>
+                <div class="navbar-burger burger mr-3" data-target="navbarMenu">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="navbar-menu mx-5 has-text-centered" id="navbarMenu">                    
+                <div class="navbar-start">
+                    <a class="navbar-item m-2 has-text-black" href="/">Home</a>
+                    <a class="navbar-item m-2 has-text-black" href="/products">Products</a>
+                    <% if (user) { %>
+                        <a class="navbar-item m-2 has-text-black" href="/user/custom/BBC2111">Custom</a>
+                        <% if (!user.isAdmin) { %>
+                            <a class="navbar-item m-2 has-text-black" href="/user/wishlist">Wishlist</a>
+                            <a class="navbar-item is-active m-2" href="/user/order/order-list">Order List</a>
+                        <% } %>
+                    <% } %>
+                    <% if (user.isAdmin) { %>
+                        <a class="navbar-item is-active m-2" href="/admin/order/order-list">Order List</a>
+                        <a class="navbar-item m-2 has-text-black" href="/admin/user-list">User List</a>
+                    <% } %>
+                    <a class="navbar-item m-2 has-text-black" href="/about">About</a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <div class="mx-3 has-text-black" id="userEmail">
+                                <%= user.username %>
+                            </div>
+                            <%- (!user ? '<a href="/login" class="button is-light"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-user"></i></span>Login</a>' : '<a href="/logout" id="btnlogout" class="button is-light" onclick="loadLogout()"><span class="icon is-small is-left mr-1"><i class="fa fa-solid fa-right-from-bracket"></i></span>Logout</a>') %>
+                            <button id="btnload" class="button is-loading" style="display: none; width: 150px;"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="app" class="container is-max-widescreen has-text-left my-5">
+        <a href="javascript:history.go(-1)" class="ml-6 has-text-weight-bold has-text-info is-size-3">
+            <i class="fas fa-chevron-left"></i> Back
+        </a>
+        <div class="columns p-5">
+            <% if (user.isAdmin) { %>
+                <div class="column is-5 mr-6 has-text-left">
+                    <div class="user-info p-5">
+                        <p class="is-size-3 has-text-grey mb-3 sourceBold">User Information</p>
+                        <table class="is-size-4">
+                            <tr>
+                                <td>Username</td>
+                                <td class="px-4">:</td>
+                                <td><%= order.username %></td>
+                            </tr>
+                            <tr>
+                                <td>Full Name</td>
+                                <td class="px-4">:</td>
+                                <td><%= order.full_name %></td>
+                            </tr>
+                            <tr>
+                                <td>Phone Number</td>
+                                <td class="px-4">:</td>
+                                <td><a href="tel: <%= order.phone %>" class="has-text-dark" title="Click to call <%= order.full_name %>"><%= order.phone %></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            <% } %>
+            <div class="column has-text-left <% if (!user.isAdmin) { %>is-8 is-offset-2<% } %>">
+                <div class="contact-info p-5">
+                    <p class="is-size-3 has-text-grey mb-3 sourceBold">Contact Information</p>
+                    <table class="is-size-4">
+                        <tr>
+                            <td>Full Name</td>
+                            <td class="px-4">:</td>
+                            <td><%= order.user_name %></td>
+                        </tr>
+                        <tr>
+                            <td>Phone Number</td>
+                            <td class="px-4">:</td>
+                            <td><a href="tel: <%= order.user_phone %>" class="has-text-dark" title="Click to call <%= order.user_name %>"><%= order.user_phone %></a></td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td class="px-4">:</td>
+                            <td><%= order.user_address %></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="order-info p-5 m-5 has-text-left">
+            <p class="is-size-2 has-text-grey has-text-centered mb-3 sourceBold">Order Details</p>
+            <div class="columns column is-10 is-offset-1">
+                <div class="columns is-multiline ">
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Reference</span></div>
+                        <div class="ml-6"><img src="/img/products/<%= order.product_code %>.jpg" alt="<%= order.product_code %>" class="ref-img-det"></div>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Product</span></div>
+                        <table class="ml-6">
+                            <tr>
+                                <td>Code</td><td class="px-4">:</td><td><%= order.product_code %></td>
+                            </tr>
+                            <tr>
+                                <td>Name</td><td class="px-4">:</td><td><%= order.product_name %></td>
+                            </tr>
+                            <tr>
+                                <td>Price</td><td class="px-4">:</td><td class="prices"><%= order.product_price %></td>
+                            </tr>
+                            <tr>
+                                <td>Include</td><td class="px-4">:</td>
+                                <td>
+                                    <ul style="list-style-type: disc;">
+                                        <% order.include.forEach((desc) => { %>
+                                            <li class="ml-5"><%= desc %></li>
+                                        <% }) %>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Balloon</span></div>
+                        <table class="ml-6">
+                            <tr>
+                                <td>Type</td><td class="px-4">:</td><td><%= order.balloon_type %></td>
+                            </tr>
+                            <tr>
+                                <td>Color</td><td class="px-4">:</td><td><%= order.balloon_color %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Ribbon</span></div>
+                        <table class="ml-6">
+                            <tr>
+                                <td>Type</td><td class="px-4">:</td><td><%= order.ribbon_type %></td>
+                            </tr>
+                            <tr>
+                                <td>Color</td><td class="px-4">:</td><td><%= order.ribbon_color %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Accessories</span></div>
+                        <ul class="ml-6" style="list-style-type: disc;">
+                            <% order.accessories.forEach((acc) => { %>
+                                <li class="ml-5"><%= acc %></li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Cellophane</span></div>
+                        <table class="ml-6">
+                            <tr>
+                                <td>Color</td><td class="px-4">:</td><td><%= order.cellophane %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Note</span></div>
+                        <div class="ml-6">
+                            <%= order.note %> 
+                        </div>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Card Text</span></div>
+                        <div class="ml-6">
+                            <%= order.card_text %> 
+                        </div>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Portrait Art</span></div>
+                        <div class="ml-6 mr-5">
+                            <img src="/img/clients_portrait_art/<%= order.portrait_art %>" alt="<%= order.portrait_art %>">
+                        </div>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Payment</span></div>
+                        <table class="ml-6">
+                            <tr>
+                                <td>Method</td><td class="px-4">:</td><td><%= order.user_payment %></td>
+                            </tr>
+                            <tr>
+                                <td>Account Number</td><td class="px-4">:</td><td><%= order.user_rek.split("-")[0] %></td>
+                            </tr>
+                            <tr>
+                                <td>Account Name</td><td class="px-4">:</td><td><%= order.user_rek.split("-")[1] %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Date</span></div>
+                        <table class="ml-6">
+                            <tr>
+                                <td>Order on</td><td class="px-4">:</td><td class="datetime"><%= order.createdAt %></td>
+                            </tr>
+                            <tr>
+                                <td>Due on</td><td class="px-4">:</td><td class="datetime"><%= order.user_date %></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="column is-half is-size-4 mb-4">
+                        <div class="is-size-3 mb-1"><span class="raleway is-bold">Voucher</span></div>
+                        <div class="ml-6">
+                            <%= order.voucher %> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="level mx-5">
+            <div class="level-left">
+                <a href="/user/order/order-list" class="button is-medium is-secondary mr-3">Back to Order List</a>
+                <% if (order.status == 'New Order') { %>
+                    <button class="button is-medium is-vital" id="cancel<%- order.id %>" onclick="cancelOrder('<%= order.status %>', '<%= order.id %>')"><i class="fa fa-solid fa-circle-xmark mr-2"></i>Cancel Order</button>
+                <% } %>
+            </div>
+            <div class="level-right">
+                <span class="is-size-3 mr-4">Status :</span>
+                <% if (user.isAdmin && order.status != 'Cancelled' && order.status != 'Finished') { %>
+                    <button class="button is-medium order-status" title="Click to update status" onclick="updateStatus('<%= order.status %>', '<%= order.id %>')"><i class="fa fa-solid fa-circle-up mr-2"></i><%= order.status %></button>
+                <% } else { %>
+                    <p class="tag is-size-4 order-status"><i class="fa fa-solid <% if (order.status == 'Cancelled') { %>fa-thumbs-down<% } else if (order.status == 'Finished') { %>fa-thumbs-up<% } else { %>fa-clock<% } %> mr-2"></i><%= order.status %></p>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer has-background-success has-text-centered has-text-black is-size-5">
+        <div class="columns">
+            <div class="column mx-5">
+                <p class="is-size-5 is-vcentered">
+                    <img src="/img/pages/BB_Effect1.png" alt="" width="80px" height="85px">
+                </p>
+                <b class="mt-5">BALLOON BLOOMS</b>
+                <p>3e Tembaga St., Medan City, North Sumatra, Indonesia</p>
+                <a href="tel: 087776462111" class="text-decoration-none text-pink is-size-4 has-text-weight-bold">Call : +62 877-7646-2111</a><br/>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-weight-bold mt-4 mb-2">Quick Links</p>
+                <ul>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/">Home</a>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/products">Products</a>
+                    </li>
+                    <li>
+                        <% if (user) { %>
+                            <a class="text-decoration-none m-2" href="/user/custom/0/BBC2111">Custom</a>
+                        <% } %>
+                    </li>
+                    <li>
+                        <a class="text-decoration-none m-2" href="/about">About</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="column mx-5">
+                <p class="has-text-left has-text-weight-bold mt-4 ml-6 pl-5">Subscribe Us</p>
+                <ul>
+                    <li class="mt-2">
+                        <a href="https://www.instagram.com/balloonblooms_medan/" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/ig-image.png" alt="ig" width='40px' class="filter-ic">&ensp;balloonblooms_medan
+                        </a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="mailto: info@balloonblooms.com" class="text-decoration-none columns is-vcentered my-3">
+                            <img src="/img/pages/email-image.png" alt="em" width='40px' class="filter-ic">&ensp;info@balloonblooms.com
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/js/script.js"></script>
+    <script>
+        // show datetime
+        let datetime = document.getElementsByClassName("datetime")
+        let now = new Date(Date.now())
+        for (let i = 0; i < datetime.length; i++) {
+            let date = new Date(datetime[i].innerText)  // selisih 7 jam di mysql astaga
+            datetime[i].innerHTML = date.toLocaleString()
+        }
+
+        // status button
+        let status = document.getElementsByClassName('order-status')
+        for (let i = 0; i < status.length; i++) {
+            if (status[i].innerText == "Cancelled") {
+                status[i].className += " is-vital"
+            }
+            else if (status[i].innerText == "New Order") {
+                status[i].className += " is-status"
+            }
+            else if (status[i].innerText == "On Proccessed") {
+                status[i].className += " is-primary"
+            }
+            else if (status[i].innerText == "Ready to Get") {
+                status[i].className += " is-info"
+            }
+            else if (status[i].innerText == "Finished") {
+                status[i].className += " is-main"
+            }
+        }
+
+        // update order status
+        function updateStatus(status, id) {
+            let statusList = ['New Order', 'On Proccessed', 'Ready to Get', 'Finished']
+            let current = statusList.indexOf(status)
+            axios({
+                method: 'put', 
+                url: '/admin/order/update/' + status + '/' + id, 
+                data: {
+                    status : statusList[current+1]
+                }
+            }).then((result) => {
+                alert('Order #' + id + ' status successfully updated to ' + statusList[current+1])
+                location.reload()
+            }).catch((err) => {
+                alert('error ' + err)
+            });
+        }
+
+        // cancel order
+        function cancelOrder(status, id) {
+            if (status == 'New Order') {
+                axios({
+                    method: 'put', 
+                    url: '/user/order/cancel/' + status + '/' + id, 
+                    data: {
+                        status : 'Cancelled'
+                    }
+                }).then((result) => {
+                    alert('Order #' + id + ' cancelled successfully')
+                }).catch((err) => {
+                    alert('error ' + err)
+                });
+            }
+            else {
+                alert("Order #' + id + ' is on proccessed/ ready, so it can't be cancelles anymore")
+            }
+            location.reload()
+        }
+    </script>
+</body>
+</html>

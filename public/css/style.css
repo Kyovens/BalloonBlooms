@@ -1,0 +1,97 @@
+@font-face {
+    font-family: OpenSans;
+    src: url(/fonts/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf);
+}
+@font-face {
+    font-family: Raleway;
+    src: url(/fonts/Raleway/Raleway-VariableFont_wght.ttf);
+}
+@font-face {
+    font-family: BeVietnam;
+    src: url(/fonts/Be_Vietnam_Pro/BeVietnamPro-Thin.ttf);
+}
+@font-face {
+    font-family: SourceSans;
+    src: url(/fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf);
+}
+@font-face {
+    font-family: SourceSansBold;
+    src: url(/fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf);
+}
+@font-face {
+    font-family: SourceSansSemi;
+    src: url(/fonts/Source_Sans_Pro/SourceSansPro-SemiBold.ttf);
+}
+
+/* Font */
+.beVietnam {
+    font-family: BeVietnam;
+    letter-spacing: 20%;
+}
+.openSans {
+    font-family: OpenSans;
+}
+.raleway {
+    font-family: Raleway;
+}
+.sourceSans {
+    font-family: SourceSans;
+}
+.sourceSemi {
+    font-family: SourceSansSemi;
+}
+.sourceBold {
+    font-family: SourceSansBold;
+}
+
+body {
+    margin: 0;
+    font-family: SourceSans;
+    background-color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.rounded {
+    border-radius: 5px;
+}
+.bordered {
+    border: 1px solid black;
+}
+.text-decoration-none {
+    color: black;
+    text-decoration: none !important;
+}
+.is-scrollable {
+    max-height: 350px;
+    overflow-y: scroll;
+}
+.bg-pink {
+    background-color: #FEE5E0;
+}
+.live-chat {
+    background-color: white;
+    width: 320px;
+    position: fixed;
+    right: 0%;
+    bottom: 0%;
+    z-index: 10;
+}
+
+/* Button */
+.viewall {
+    padding: 8px 35px !important;
+}
+.seeall {
+    padding: 5px 30px !important;
+}
