@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db          # Nama service database
+      DB_USER: user     # Ganti dengan user MySQL yang Anda inginkan
+      DB_PASS: root  # Ganti dengan password yang Anda inginkan
+      DB_NAME: web_chat     # Ganti dengan nama database yang Anda inginkan
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: web_chat        # Nama database yang akan dibuat
+      MYSQL_USER: user             # User untuk akses database
+      MYSQL_PASSWORD: root      # Password untuk user
+      MYSQL_ROOT_PASSWORD: root # Password untuk root user
+    ports:
+      - "3306:3306"                    # Mengekspos port MySQL
