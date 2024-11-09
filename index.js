@@ -72,6 +72,13 @@ io.on('connection', socket => {
         socket.emit('message', formatMessage(botName, `Welcome to BalloonBloomsCiViC - ${room} Live Chat`));
         socket.broadcast.to(user.room).emit('joinleave', formatJoinLeave(botName, user.username + ' has joined the chat'))
 
+        if (!users.find(admin => admin.username.toLocaleLowerCase() == 'admin')) {  // jika admin belum join di room manapun
+            socket.emit('message', formatMessage(botName, "<b>Admin is Offline</b>. Your chat won't be seen until our Admin join this Live-Chat.<br>Please wait until BB-Admin joined or you can chat directly to Whatsapp <a href='tel: 087776462111' class='text-decoration-none'><b>+62 877-7646-2111</b></a> <small>(recommended)</small>"));  // only to me
+        }
+        else if (user.username.toLocaleLowerCase() != 'admin'){  // jika admin sudah ad tp yg masuk bukan admin
+            socket.emit('message', formatMessage(botName, '<b>Admin is Online</b>. Please wait for response.'));  // only to me
+        }
+
         // jika yg masuk admin dan admin memang baru join utk pertama kali
         if (user.username.toLocaleLowerCase() == 'admin' && users.filter(user => user.username.toLocaleLowerCase() == 'admin').length == 1) {
             socket.broadcast.emit('message', formatMessage(botName, '<b>Admin is Online</b>. Please wait for response.'));
@@ -106,6 +113,11 @@ io.on('connection', socket => {
 
             // kasi tau semua org di room klo ad yg leave siapapun itu
             socket.broadcast.to(user.room).emit('joinleave', formatJoinLeave(botName, user.username + ' has left the chat'))
+
+            // jika yg leave adalah admin dan admin sudah tdk ad di room manapun
+            if (user.username.toLocaleLowerCase() == 'admin' && !users.find(admin => admin.username.toLocaleLowerCase() == 'admin')) {
+                socket.broadcast.emit('message', formatMessage(botName, "<b>Admin is Offline</b>. Your chat won't be seen until our Admin join this Live-Chat.<br>Please wait until BB-Admin joined or you can chat directly to Whatsapp <a href='tel: 087776462111' class='text-decoration-none'><b>+62 877-7646-2111</b></a> <small>(recommended)</small>"));  // only to me
+            }
             
         }
     });
