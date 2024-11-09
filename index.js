@@ -67,7 +67,7 @@ const botName = 'Bot';
 io.on('connection', socket => {
     socket.on('joinRoom', ({ username, room }) => {
         const user = userJoin(socket.id, username, room);
-        
+        socket.join(user.room);
         // Welcome current user
         socket.emit('message', formatMessage(botName, `Welcome to BalloonBloomsCiViC - ${room} Live Chat`));
         socket.broadcast.to(user.room).emit('joinleave', formatJoinLeave(botName, user.username + ' has joined the chat'))
@@ -76,6 +76,12 @@ io.on('connection', socket => {
         if (user.username.toLocaleLowerCase() == 'admin' && users.filter(user => user.username.toLocaleLowerCase() == 'admin').length == 1) {
             socket.broadcast.emit('message', formatMessage(botName, '<b>Admin is Online</b>. Please wait for response.'));
         }
+
+        // Send users and room info
+        io.to(user.room).emit('roomUsers', {
+            room: user.room,
+            users: getRoomUsers(user.room),
+        });
         
     });
     // Listen for chatMessage
@@ -85,9 +91,14 @@ io.on('connection', socket => {
     });
     // Runs when client disconnects
     socket.on('disconnect', () => {
-        
+        const user = userLeave(socket.id);
         if (user) {
-            
+            // Send users and room info
+            io.to(user.room).emit('roomUsers', {
+                room: user.room,
+                users: getRoomUsers(user.room)
+            });
+
             // kasi tau semua org di room klo ad yg leave siapapun itu
             socket.broadcast.to(user.room).emit('joinleave', formatJoinLeave(botName, user.username + ' has left the chat'))
             
