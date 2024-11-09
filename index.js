@@ -82,6 +82,11 @@ io.on('connection', socket => {
             room: user.room,
             users: getRoomUsers(user.room),
         });
+
+        // Request
+        if (user.room == 'ADMIN with ' + user.username) {
+            io.to('Public').emit('request', formatRequest(`${user.username}`));
+        }
         
     });
     // Listen for chatMessage
@@ -123,6 +128,18 @@ app.get('(/home)?', (req, res) => {
 
 app.get('/about(-us)?', (req, res) => {
     res.render('About', { user: req.session.user || "" });
+})
+
+app.get('/live-chat/:username/:room', (req, res) => {
+    try {
+        if ((req.params.username.toLocaleLowerCase() == 'admin' && req.session.user.isAdmin) || req.params.username.toLocaleLowerCase() != 'admin')
+            res.render('LiveChat', { user: req.session.user || "" })
+        else
+            throw err
+    }
+    catch(err) {
+        res.redirect('/forbidden')
+    }
 })
 
 app.get('/forbidden', (req, res) => {
