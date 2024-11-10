@@ -4,7 +4,7 @@ const User = require('../models/user.js');
 const login = (req, res, next) => {
     let msg = req.session.err || ""
     req.session.err = ""
-    res.render('login', { user: req.session.user || "", message: msg })
+    res.render('Login', { user: req.session.user || "", message: msg })
 }
 const logout = (req, res, next) => {
     req.session.destroy()
@@ -37,7 +37,7 @@ const auth = (req, res, next) => {
 const signup = (req, res, next) => {
     let msg = req.session.err || ""
     req.session.err = ""
-    res.render('signup', { user: req.session.user || "", message: msg })
+    res.render('Signup', { user: req.session.user || "", message: msg })
 }
 const create = (req, res, next) => {
     const data = {
