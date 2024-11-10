@@ -216,7 +216,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/js/script.js"></script>
     <script>
-        // show datetime drop comment
+        // Show datetime drop comment
         let datetime = document.getElementsByClassName("datetime")
         let now = new Date(Date.now())
         for (let i = 0; i < datetime.length; i++) {
@@ -234,7 +234,7 @@
             }
         }
 
-        // bold username tag
+        // Bold username tag
         let comments = document.getElementsByClassName('comments')
         for (let i = 0; i < comments.length; i++) {
             let comment = comments[i].innerText.split(' ')
@@ -248,7 +248,7 @@
             comments[i].innerHTML = comment.join(' ')
         }
 
-        // handle reply comment
+        // Handle reply comment
         let handleReply = (username) => {
             let commentbox = document.getElementById('comment')
             let commentval = document.getElementById('comment').value
@@ -260,7 +260,7 @@
             commentbox.focus()
         }
 
-        // handle delete comment
+        // Handle delete comment
         function delComment(isAdmin, id) {
             if (isAdmin == 'true') status = 'admin'
             else status = 'user'
