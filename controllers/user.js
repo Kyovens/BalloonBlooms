@@ -53,7 +53,7 @@ const create = (req, res, next) => {
         }
         else {
             User.create(data).then((results) => {
-                res.render('login', { user: data || "", message: "Account successfully created. Please login again." })
+                res.render('Login', { user: data || "", message: "Account successfully created. Please login again." })
             }).catch(err => {
                 req.session.err = err
                 console.log(err);
