@@ -247,23 +247,6 @@
             });
             comments[i].innerHTML = comment.join(' ')
         }
-        
-        // // generate random avatar for user profpic
-        // let avatar = document.getElementsByClassName('avatar')
-        // let username = document.getElementsByClassName('username')
-        // let listUser = {'nama':[], 'angka':[]}  // user draft
-        // for (let i = 0; i < avatar.length; i++) {
-        //     let angka = Math.floor(Math.random()*54)
-        //     if (listUser.nama.includes(username[i].innerHTML)) {
-        //         // generate the same avatar for the same user so it won't be confusing
-        //         angka = listUser.angka[listUser.nama.findIndex(user => user == username[i].innerHTML)]
-        //     }
-        //     else {
-        //         listUser.nama.push(username[i].innerHTML)
-        //         listUser.angka.push(angka)
-        //     }
-        //     avatar[i].src = 'https://xsgames.co/randomusers/assets/avatars/pixel/'+angka+'.jpg'
-        // }
 
         // handle reply comment
         let handleReply = (username) => {
