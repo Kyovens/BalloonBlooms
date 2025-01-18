@@ -6,20 +6,25 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      DB_HOST: db          # Nama service database
-      DB_USER: user     # Ganti dengan user MySQL yang Anda inginkan
-      DB_PASS: root  # Ganti dengan password yang Anda inginkan
-      DB_NAME: web_chat     # Ganti dengan nama database yang Anda inginkan
+      DB_HOST: db
+      DB_USER: root          # Gunakan 'root' sebagai pengguna
+      DB_PASS: root          # Password root yang sama seperti MYSQL_ROOT_PASSWORD
+      DB_NAME: web_chat      # Nama database yang diinginkan
+    restart: always
 
   db:
     image: mysql:5.7
     restart: always
     environment:
       MYSQL_DATABASE: web_chat        # Nama database yang akan dibuat
-      MYSQL_USER: user             # User untuk akses database
-      MYSQL_PASSWORD: root      # Password untuk user
-      MYSQL_ROOT_PASSWORD: root # Password untuk root user
+      MYSQL_ROOT_PASSWORD: root       # Password untuk root user
     ports:
-      - "3306:3306"                    # Mengekspos port MySQL
+      - "3307:3306"  # Ganti ini jika port 3306 sudah digunakan di host
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
