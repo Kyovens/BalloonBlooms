@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to Docker Hub
+name: Build, Push, and Deploy to Kubernetes
 
 on:
   push:
@@ -11,7 +11,6 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +23,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y docker-compose
 
       - name: Build the Docker image
-        run: docker-compose build --no-cache --force-rm 
+        run: docker-compose build --no-cache --force-rm
 
   test:
     runs-on: ubuntu-latest
@@ -35,7 +34,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y docker-compose
 
       - name: Test the Docker image
-        run: docker-compose up -d 
+        run: docker-compose up -d
 
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -65,3 +64,77 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy_to_kubernetes:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: push_to_registry
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Add VPS host key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 2218 $VPS_IP >> ~/.ssh/known_hosts
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+
+      - name: Set up SSH Tunnel
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -v -f -N -L 8443:192.168.49.2:8443 -p 2218 $SSH_USER@$VPS_IP
+        env:
+          VPS_IP: ${{ secrets.VPS_IP }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+
+      - name: Verify SSH Tunnel
+        run: |
+          echo "Verifying SSH tunnel..."
+          curl -k -H "Authorization: Bearer $KUBE_TOKEN" https://localhost:8443
+          echo "SSH tunnel verification complete."
+        env:
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
+
+      - name: Configure kubectl with token
+        run: |
+          kubectl config set-credentials github-actions-user --token=$KUBE_TOKEN
+          kubectl config set-cluster my-cluster --server=https://localhost:8443 --insecure-skip-tls-verify
+          kubectl config set-context my-context --cluster=my-cluster --user=github-actions-user
+          kubectl config use-context my-context
+        env:
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+
+      - name: Deploy Database
+        run: |
+          kubectl apply -f kubernetes/db-deployment.yaml
+          kubectl apply -f kubernetes/db-service.yaml
+
+      - name: Wait for Database to be Ready
+        run: |
+          echo "Waiting for database to be ready..."
+          kubectl wait --for=condition=Ready pod -l app=db --timeout=300s
+          echo "Database pod is ready."
+
+          # Tunggu hingga MySQL siap menerima koneksi
+          echo "Waiting for MySQL to accept connections..."
+          kubectl exec $(kubectl get pods -l app=db -o jsonpath='{.items[0].metadata.name}') -- bash -c 'while ! mysqladmin ping -h db -u root -proot --silent; do sleep 5; done'
+          echo "MySQL is ready."
+
+      - name: Initialize Database
+        run: |
+          echo "Initializing database..."
+          kubectl exec $(kubectl get pods -l app=db -o jsonpath='{.items[0].metadata.name}') -- mysql -h db -u root -proot -e "CREATE DATABASE IF NOT EXISTS web_chat;"
+          echo "Database initialized."
+
+      - name: Deploy Application
+        run: |
+          kubectl apply -f kubernetes/app-deployment.yaml
+          kubectl apply -f kubernetes/app-service.yaml
